@@ -27,10 +27,16 @@ void free_system(OpticalSystem *system)
 int save_results(const char *filename, const Ray *rays, unsigned int count)
 {
     FILE *f = fopen(filename, "w");
-    if (!f) return -1;
+    if (!f)
+        return -1;
+
+    fprintf(f, "[\n");
     for (unsigned int i = 0; i < count; ++i) {
-        fprintf(f, "%f %f\n", rays[i].L, rays[i].U);
+        fprintf(f, "  {\"L\": %.6f, \"U\": %.6f}%s\n",
+                rays[i].L, rays[i].U,
+                (i + 1 < count) ? "," : "");
     }
+    fprintf(f, "]\n");
     fclose(f);
     return 0;
 }
