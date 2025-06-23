@@ -4,7 +4,8 @@ This repository contains a teaching-oriented ray tracing framework for
 spherical lenses.  The code is organised into two major parts:
 
 - **backend** – C sources for calculating ray paths and optical aberrations.
-- **frontend** – placeholder directory for future visualisation code.
+- **frontend** – Node.js based server and static assets providing a simple
+  browser UI to display ray tracing results.
 
 ```
 .
@@ -12,7 +13,7 @@ spherical lenses.  The code is organised into two major parts:
 │   ├── include       # Public headers
 │   ├── src           # Implementation files
 │   └── Makefile      # Builds the `raytracer` executable
-├── frontend          # Future UI implementation
+├── frontend          # Node.js web front-end
 ├── docs              # Additional documentation
 └── Makefile          # Top-level build entry
 ```
@@ -46,6 +47,7 @@ binary `raytracer` will be placed in the `backend` directory.
 
 ## Notes for Frontend Integration
 
-The backend saves results to a text file, which can be read by a UI
-application for visualisation.  The exact data exchange format can be
-extended (e.g. JSON) when the frontend is developed.
+The backend now writes results in JSON format.  A small Node.js server in the
+`frontend` directory runs the compiled `raytracer` on a sample optical system
+and exposes the data via `/api/results`.  Static files under `frontend/public`
+provide a very basic web interface that fetches and displays this data.
