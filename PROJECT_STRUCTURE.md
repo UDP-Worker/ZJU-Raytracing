@@ -45,6 +45,10 @@ remain to be implemented.
 Run `make` in the repository root to compile the backend.  The resulting
 binary `raytracer` will be placed in the `backend` directory.
 
+To set up the front-end run `make frontend`, which installs the required
+Node.js packages.  After that you can launch the demo server with
+`make start`.
+
 ## Notes for Frontend Integration
 
 The backend now writes results in JSON format.  A small Node.js server in the
