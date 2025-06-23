@@ -12,7 +12,11 @@ OpticalSystem *load_system(const char *filename);
 /* Free an optical system previously loaded. */
 void free_system(OpticalSystem *system);
 
-/* Save computed trace results to a text file or JSON for front-end use. */
+/*
+ * Save computed trace results to a JSON file for consumption by the
+ * front-end. Each ray is written as an object containing its L and U
+ * values.
+ */
 int save_results(const char *filename, const Ray *rays, unsigned int count);
 
 #endif /* IO_H */
