@@ -5,7 +5,7 @@ all:
 
 # Install front-end dependencies
 frontend:
-	npm install --prefix frontend
+	cd frontend && npm install
 
 # Launch the Node.js server after building the backend
 start: all frontend
