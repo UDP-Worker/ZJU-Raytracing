@@ -9,6 +9,7 @@ frontend:
 
 # Launch the Node.js server after building the backend
 start: all frontend
+	cd frontend && npm run build
 	node frontend/server.js
 
 # Build production front-end
