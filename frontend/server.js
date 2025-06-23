@@ -2,18 +2,35 @@ const express = require('express');
 const { execFile } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static files from public
-app.use(express.static(path.join(__dirname, 'public')));
+// Parse JSON bodies from frontend
+app.use(express.json());
+// Serve built static files
+app.use(express.static(path.join(__dirname, 'dist')));
 
-app.get('/api/results', (req, res) => {
-  // Run backend raytracer with sample data
+app.post('/api/trace', (req, res) => {
+  const surfaces = req.body.surfaces;
+  if (!Array.isArray(surfaces)) {
+    return res.status(400).json({ error: 'invalid input' });
+  }
+
   const backendPath = path.join(__dirname, '../backend/raytracer');
-  const systemFile = path.join(__dirname, '../backend/example/system.txt');
-  const resultFile = path.join(__dirname, '../backend/example/results.json');
+  const systemFile = path.join(os.tmpdir(), 'system.txt');
+  const resultFile = path.join(os.tmpdir(), 'results.json');
+
+  const lines = [String(surfaces.length)];
+  for (const s of surfaces) {
+    const r = s.r ?? 0;
+    const n1 = s.n1 ?? 1;
+    const n2 = s.n2 ?? 1;
+    const d = s.d ?? 0;
+    lines.push(`${r} ${n1} ${n2} ${d}`);
+  }
+  fs.writeFileSync(systemFile, lines.join('\n'));
 
   execFile(backendPath, [systemFile, resultFile], (err) => {
     if (err) {

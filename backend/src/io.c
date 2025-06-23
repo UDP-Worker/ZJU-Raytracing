@@ -4,16 +4,40 @@
 
 OpticalSystem *load_system(const char *filename)
 {
-    /* Placeholder implementation: real code should parse the file
-     * and allocate surfaces accordingly. */
     FILE *f = fopen(filename, "r");
-    if (!f) return NULL;
-    fclose(f);
+    if (!f)
+        return NULL;
+
+    unsigned int count;
+    if (fscanf(f, "%u", &count) != 1) {
+        fclose(f);
+        return NULL;
+    }
 
     OpticalSystem *sys = malloc(sizeof(*sys));
-    if (!sys) return NULL;
-    sys->surfaces = NULL;
-    sys->count = 0;
+    if (!sys) {
+        fclose(f);
+        return NULL;
+    }
+
+    sys->surfaces = malloc(sizeof(Surface) * count);
+    if (!sys->surfaces) {
+        free(sys);
+        fclose(f);
+        return NULL;
+    }
+    sys->count = count;
+
+    for (unsigned int i = 0; i < count; ++i) {
+        Surface *s = &sys->surfaces[i];
+        if (fscanf(f, "%lf %lf %lf %lf", &s->r, &s->n1, &s->n2, &s->d) != 4) {
+            free_system(sys);
+            fclose(f);
+            return NULL;
+        }
+    }
+
+    fclose(f);
     return sys;
 }
 
