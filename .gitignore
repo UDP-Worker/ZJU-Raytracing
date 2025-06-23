@@ -2,3 +2,4 @@
 backend/build/
 backend/raytracer
 frontend/node_modules/
+frontend/dist/
